@@ -8,6 +8,8 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
+#include "recognition_model.h"
+
 namespace Ui {
 class MainWindow;
 }
@@ -27,6 +29,7 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+    RecognitionModel model;
 };
 
 #endif // MAINWINDOW_H
