@@ -11,12 +11,12 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete ui;
-
 }
 
 void MainWindow::on_close_app_button_clicked()
 {
     this->close();
+    model.release();
 }
 
 void MainWindow::on_open_camera_button_clicked()
