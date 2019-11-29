@@ -15,7 +15,21 @@ FaceCapture::~FaceCapture()
 
 void FaceCapture::on_capture_button_clicked()
 {
-    QPixmap image = model.captureFace();
-    ui->capture_label->setPixmap(image);
-    model.release();
+    model.setFaceName (ui->name_line_edit->text().toStdString());
+    model.saveTrainingData();
+    while (continueCapture)
+    {
+        ui->capture_label->setPixmap(model.captureFace());
+        qApp->processEvents();
+    }
 }
+
+void FaceCapture::on_buttonBox_clicked(QAbstractButton *button)
+{
+    continueCapture = false;
+    if (button == ui->buttonBox->button(QDialogButtonBox::Ok))
+    {
+        /* train and save model */
+    }
+}
+

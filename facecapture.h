@@ -2,6 +2,7 @@
 #define FACECAPTURE_H
 
 #include <QDialog>
+#include <QAbstractButton>
 #include "facecapturemodel.h"
 
 namespace Ui {
@@ -19,9 +20,12 @@ public:
 private slots:
     void on_capture_button_clicked();
 
+    void on_buttonBox_clicked(QAbstractButton *button);
+
 private:
     Ui::FaceCapture *ui;
     FaceCaptureModel model;
+    bool continueCapture = true;
 };
 
 #endif // FACECAPTURE_H

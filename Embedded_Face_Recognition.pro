@@ -18,24 +18,25 @@ SOURCES += main.cpp\
         recognition_model.cpp \
     person_detector.cpp \
     facecapture.cpp \
-    facecapturemodel.cpp
+    facecapturemodel.cpp \
+    capturer.cpp
 
 HEADERS  += mainwindow.h \
     recognition_model.h \
     person_detector.h \
     facecapture.h \
-    facecapturemodel.h
+    facecapturemodel.h \
+    capturer.h
 
 FORMS    += mainwindow.ui \
     facecapture.ui
 
-INCLUDEPATH += /usr/local/include/
+INCLUDEPATH += /usr/include/
 
-LIBS += /usr/local/lib/libopencv_imgproc.so \
-        /usr/local/lib/libopencv_highgui.so \
-        /usr/local/lib/libopencv_core.so \
-        /usr/local/lib/libopencv_videoio.so \
-        /usr/local/lib/libopencv_ml.so \
-        /usr/local/lib/libopencv_tracking.so \
-        /usr/local/lib/libopencv_objdetect.so \
+LIBS += /usr/lib/libopencv_imgproc.so \
+        /usr/lib/libopencv_highgui.so \
+        /usr/lib/libopencv_core.so \
+        /usr/lib/libopencv_videoio.so \
+        /usr/lib/libopencv_ml.so \
+        /usr/lib/libopencv_objdetect.so \
         -fopenmp
