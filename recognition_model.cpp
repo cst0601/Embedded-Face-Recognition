@@ -34,9 +34,9 @@ QPixmap RecognitionModel::getDetectFrame ()
 {
     clear();
     /* show it on opencv window */
-    //slidingWindow(generatePyramid(), Size(64, 144), Size(16, 32));
-    cascadeSearch();
-    showPyramid();  /* testing */
+    slidingWindow(generatePyramid(), Size(64, 144), Size(16, 32));
+    //cascadeSearch();
+    //showPyramid();  /* testing */
     return mat2Pixmap(inputFrame);
 }
 
@@ -103,7 +103,7 @@ void RecognitionModel::showPyramid () const
 }
 
 // window size = 64 * 144
-void RecognitionModel::slidingWindow(std::vector<Mat> image, Size windowSize, Size step)
+void RecognitionModel::slidingWindow(std::vector<Mat> image, Size windowSize, Size stride)
 {
     for (unsigned int i = 0; i < image.size(); ++i)
     {
