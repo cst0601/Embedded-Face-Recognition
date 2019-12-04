@@ -13,6 +13,7 @@ Mat Capturer::getFrame()
         std::cout << "ERROR opening camera" << std::endl;
         throw (std::string)"empty frame";
     }
+    //inputFrame = imread("~/test_pedestrian.jpg", IMREAD_COLOR);
     return inputFrame;
 }
 

@@ -37,6 +37,7 @@ QPixmap RecognitionModel::getDetectFrame ()
     slidingWindow(generatePyramid(), Size(64, 144), Size(16, 32));
     //cascadeSearch();
     //showPyramid();  /* testing */
+    generateInstances();
     return mat2Pixmap(inputFrame);
 }
 
@@ -108,9 +109,9 @@ void RecognitionModel::slidingWindow(std::vector<Mat> image, Size windowSize, Si
     for (unsigned int i = 0; i < image.size(); ++i)
     {
         /* slide through the whole frame */
-        for (unsigned int windowY = 0; windowY + windowSize.height < image[i].rows; windowY += step.height)
+        for (unsigned int windowY = 0; windowY + windowSize.height < image[i].rows; windowY += stride.height)
         {
-            for (unsigned int windowX = 0; windowX + windowSize.width < image[i].cols; windowX += step.width)
+            for (unsigned int windowX = 0; windowX + windowSize.width < image[i].cols; windowX += stride.width)
             {
                 Mat roiMat = image[i](Rect(windowX, windowY, windowSize.width, windowSize.height));
                 float result = svm->predict(hog(roiMat));
@@ -133,7 +134,7 @@ void RecognitionModel::generateInstances ()
     for (unsigned int i = 0; i < scores.size(); ++i)
         if (scores[i] != -1) {
             ++counter;
-            rectangle(inputFrame, rois[i], Scalar(0, 255, 0), 1);
+            rectangle(inputFrame, rois[i], Scalar(0, 255, 0), 1);   /* for testing */
             //std::cout << "roi area = " << rois[i].area() << std::endl;
         }
     //std::cout << "rois: " << counter << std::endl;

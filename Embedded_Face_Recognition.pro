@@ -16,18 +16,18 @@ CONFIG += c++11
 SOURCES += main.cpp\
         mainwindow.cpp \
         recognition_model.cpp \
-    facecapture.cpp \
-    facecapturemodel.cpp \
-    capturer.cpp
+        facecapture.cpp \
+        facecapturemodel.cpp \
+        capturer.cpp
 
 HEADERS  += mainwindow.h \
-    recognition_model.h \
-    facecapture.h \
-    facecapturemodel.h \
-    capturer.h
+            recognition_model.h \
+            facecapture.h \
+            facecapturemodel.h \
+            capturer.h
 
 FORMS    += mainwindow.ui \
-    facecapture.ui
+            facecapture.ui
 
 INCLUDEPATH += /usr/include/
 
@@ -37,4 +37,3 @@ LIBS += /usr/lib/libopencv_imgproc.so \
         /usr/lib/libopencv_videoio.so \
         /usr/lib/libopencv_ml.so \
         /usr/lib/libopencv_objdetect.so \
-        -fopenmp
