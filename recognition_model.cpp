@@ -11,20 +11,22 @@ RecognitionModel::RecognitionModel()
 
 RecognitionModel::~RecognitionModel() {}
 
+// convert mat to pixmap. also change the color space from bgr to rgb
 QPixmap RecognitionModel::mat2Pixmap (Mat input)
 {
+    Mat rgbFrame;
+    cvtColor(input, rgbFrame, CV_BGR2RGB);
     return QPixmap::fromImage(
-                QImage((unsigned char*) input.data,
-                    input.cols,
-                    input.rows,
+                QImage((unsigned char*) rgbFrame.data,
+                    rgbFrame.cols,
+                    rgbFrame.rows,
                     QImage::Format_RGB888)
                 );
 }
 
 QPixmap RecognitionModel::getInputFrame ()
 {
-    inputFrame = Capturer::getInstance()->getFrame();
-    cvtColor(inputFrame, inputFrame, CV_BGR2RGB);
+    inputFrame = Capturer::getInstance()->getFrame();    
     return mat2Pixmap(inputFrame);
 }
 
@@ -33,8 +35,8 @@ QPixmap RecognitionModel::getDetectFrame ()
     clear();
     /* show it on opencv window */
     //slidingWindow(generatePyramid(), Size(64, 144), Size(16, 32));
-    //cascadeSearch();
-    generatePyramid();  /* testing */
+    cascadeSearch();
+    showPyramid();  /* testing */
     return mat2Pixmap(inputFrame);
 }
 
@@ -55,7 +57,7 @@ void RecognitionModel::cascadeSearch ()
 }
 
 // Generate 3 different size of image
-std::vector<Mat> RecognitionModel::generatePyramid ()
+std::vector<Mat> RecognitionModel::generatePyramid () const
 {
     std::vector<Mat> pyramidFrame;
     Mat frame = inputFrame.clone();
@@ -65,11 +67,6 @@ std::vector<Mat> RecognitionModel::generatePyramid ()
     {
         pyrDown(frame.clone(), frame, Size(frame.cols / 2, frame.rows / 2));
         pyramidFrame.push_back(frame);
-    }
-
-    for (unsigned int i = 0; i < 3; ++i)
-    {
-        cv::imshow("test_" + std::to_string(i), pyramidFrame[i]);
     }
 
     return pyramidFrame;
@@ -93,6 +90,16 @@ Rect RecognitionModel::roiDepyramid (Rect roi, int scale) {
 std::string RecognitionModel::getNumberOfFaces () const
 {
     return std::to_string(faceNum);
+}
+
+// testing method, generates and show the pyramid image
+void RecognitionModel::showPyramid () const
+{
+    std::vector<Mat> pyramidFrame = generatePyramid();
+    for (unsigned int i = 0; i < 3; ++i)
+    {
+        cv::imshow("test_" + std::to_string(i), pyramidFrame[i]);
+    }
 }
 
 // window size = 64 * 144

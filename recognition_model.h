@@ -27,10 +27,11 @@ public:
     QPixmap getInputFrame ();
     QPixmap getDetectFrame();
     void cascadeSearch();
-    std::vector<Mat> generatePyramid();
+    std::vector<Mat> generatePyramid() const;
     std::vector<float> hog(Mat);
     Rect roiDepyramid(Rect, int);
     std::string getNumberOfFaces () const;
+    void showPyramid () const;
     void slidingWindow(std::vector<Mat>, Size, Size);
     void generateInstances();
     void clear();

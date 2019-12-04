@@ -12,6 +12,11 @@
 
 using namespace cv;
 
+/*
+ * FaceCaptureModel
+ * For capturing new face and train it
+ *
+ */
 class FaceCaptureModel
 {
 public:

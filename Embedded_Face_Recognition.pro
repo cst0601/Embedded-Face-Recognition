@@ -16,14 +16,12 @@ CONFIG += c++11
 SOURCES += main.cpp\
         mainwindow.cpp \
         recognition_model.cpp \
-    person_detector.cpp \
     facecapture.cpp \
     facecapturemodel.cpp \
     capturer.cpp
 
 HEADERS  += mainwindow.h \
     recognition_model.h \
-    person_detector.h \
     facecapture.h \
     facecapturemodel.h \
     capturer.h
