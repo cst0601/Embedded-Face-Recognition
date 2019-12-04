@@ -32,10 +32,10 @@
   <widget class="QLabel" name="capture_label">
    <property name="geometry">
     <rect>
-     <x>90</x>
-     <y>40</y>
-     <width>351</width>
-     <height>231</height>
+     <x>80</x>
+     <y>20</y>
+     <width>381</width>
+     <height>271</height>
     </rect>
    </property>
    <property name="text">

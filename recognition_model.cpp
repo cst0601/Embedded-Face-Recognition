@@ -33,7 +33,8 @@ QPixmap RecognitionModel::getDetectFrame ()
     clear();
     /* show it on opencv window */
     //slidingWindow(generatePyramid(), Size(64, 144), Size(16, 32));
-    cascadeSearch();
+    //cascadeSearch();
+    generatePyramid();  /* testing */
     return mat2Pixmap(inputFrame);
 }
 
@@ -64,6 +65,11 @@ std::vector<Mat> RecognitionModel::generatePyramid ()
     {
         pyrDown(frame.clone(), frame, Size(frame.cols / 2, frame.rows / 2));
         pyramidFrame.push_back(frame);
+    }
+
+    for (unsigned int i = 0; i < 3; ++i)
+    {
+        cv::imshow("test_" + std::to_string(i), pyramidFrame[i]);
     }
 
     return pyramidFrame;
