@@ -19,14 +19,16 @@ SOURCES += main.cpp\
         facecapture.cpp \
         facecapturemodel.cpp \
         capturer.cpp \
-    haar_face_detector.cpp
+    haar_face_detector.cpp \
+    hogsvm_face_detector.cpp
 
 HEADERS  += mainwindow.h \
             recognition_model.h \
             facecapture.h \
             facecapturemodel.h \
             capturer.h \
-    haar_face_detector.h
+    haar_face_detector.h \
+    hogsvm_face_detector.h
 
 FORMS    += mainwindow.ui \
             facecapture.ui

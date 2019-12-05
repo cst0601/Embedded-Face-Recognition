@@ -37,12 +37,13 @@ void FaceCaptureModel::saveTrainingData()
         if (imageSig == 0)
         {
             time_t t = time(NULL);
-            std::cout << trainingDataPath + "/" + faceName + "/" + std::to_string(t) + std::to_string(i) + ".jpg" << std::endl;
-            cv::imwrite(trainingDataPath + "/" + faceName + "/" + std::to_string(t) + std::to_string(i) + ".jpg",
-                        trainingImage);
+            std::string filePath = trainingDataPath + "/" + faceName + "/" + std::to_string(t) + std::to_string(i) + ".jpg";
+            std::cout << "saving: " << filePath << std::endl;
+            cv::imwrite(filePath, trainingImage);
         }
     }
     faces.clear();
+    train();
 }
 
 // generate list of face in 160 * 160,
@@ -64,5 +65,6 @@ void FaceCaptureModel::hog()
 
 void FaceCaptureModel::train ()
 {
-
+    HogSvmFaceDetector detector(123);
+    detector.readTrainingData("/home/nvidia/Desktop/face_data/");
 }
