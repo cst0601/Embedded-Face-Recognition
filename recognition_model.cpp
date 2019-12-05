@@ -4,8 +4,6 @@ RecognitionModel::RecognitionModel()
 {
     std::cout << "OpenCV Version used:" << CV_MAJOR_VERSION << "." << CV_MINOR_VERSION << "." << CV_VERSION_REVISION  << std::endl;
     svm = SVM::load("/home/nvidia/Desktop/model/people.xml");
-    peopleClassifier.load("/home/nvidia/Desktop/model/haarcascades/haarcascade_frontalface_default.xml");
-    //tracker = TrackerKCF::create();   // abandoned
     hogDescriptor = HOGDescriptor(Size(64, 144), Size(16, 16), Size(8, 8), Size(8, 8), 9);
 }
 
@@ -38,19 +36,13 @@ QPixmap RecognitionModel::getDetectFrame ()
     cascadeSearch();
     //showPyramid();  /* testing */
     generateInstances();
-    imshow("detect", inputFrame);
+    //imshow("detect", inputFrame);
     return mat2Pixmap(inputFrame);
 }
 
 void RecognitionModel::cascadeSearch ()
 {
-    std::vector<Rect> peopleInstances;
-    Mat grayFrame;
-    cvtColor(inputFrame, grayFrame, COLOR_BGR2GRAY);
-    equalizeHist(grayFrame, grayFrame);
-    // detect
-    peopleClassifier.detectMultiScale(grayFrame, peopleInstances, 1.1, 2, 0|CASCADE_SCALE_IMAGE, Size(30, 30));
-
+    std::vector<Rect> peopleInstances = faceDetector.searchFace(inputFrame);
     faceNum = peopleInstances.size();
     for (size_t i = 0; i < peopleInstances.size(); ++i)
     {
@@ -65,9 +57,10 @@ std::vector<Mat> RecognitionModel::generatePyramid () const
     Mat frame = inputFrame.clone();
     pyramidFrame.push_back(frame);
 
-    for (unsigned int i = 0; i < 2; ++i)
+    for (unsigned int i = 0; i < 3; ++i)
     {
-        pyrDown(frame.clone(), frame, Size(frame.cols / 2, frame.rows / 2));
+        pyrDown(frame.clone(), frame, Size(int(frame.cols / 2),
+                                           int(frame.rows / 2)));
         pyramidFrame.push_back(frame);
     }
 
@@ -132,6 +125,7 @@ void RecognitionModel::showPyramid () const
 // window size = 64 * 144
 void RecognitionModel::slidingWindow(std::vector<Mat> image, Size windowSize, Size stride)
 {
+    #pragma omp parallel for    // <--- cheating :)
     for (unsigned int i = 0; i < image.size(); ++i)
     {
         /* slide through the whole frame */

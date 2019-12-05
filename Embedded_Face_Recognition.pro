@@ -18,16 +18,20 @@ SOURCES += main.cpp\
         recognition_model.cpp \
         facecapture.cpp \
         facecapturemodel.cpp \
-        capturer.cpp
+        capturer.cpp \
+    haar_face_detector.cpp
 
 HEADERS  += mainwindow.h \
             recognition_model.h \
             facecapture.h \
             facecapturemodel.h \
-            capturer.h
+            capturer.h \
+    haar_face_detector.h
 
 FORMS    += mainwindow.ui \
             facecapture.ui
+
+QMAKE_CXXFLAGS += -fopenmp
 
 INCLUDEPATH += /usr/include/
 
@@ -37,4 +41,5 @@ LIBS += /usr/lib/libopencv_imgproc.so \
         /usr/lib/libopencv_videoio.so \
         /usr/lib/libopencv_ml.so \
         /usr/lib/libopencv_objdetect.so \
-        /usr/lib/libopencv_imgcodecs.so
+        /usr/lib/libopencv_imgcodecs.so \
+        -fopenmp

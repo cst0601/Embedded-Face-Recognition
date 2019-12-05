@@ -2,6 +2,8 @@
 #define MODEL
 
 #include <string>
+#include <omp.h>
+
 #include <QPixmap>
 #include <opencv2/opencv.hpp>
 #include <opencv2/videoio.hpp>
@@ -10,10 +12,10 @@
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/imgproc/types_c.h>
 #include <opencv2/ml/ml.hpp>
-//#include <opencv2/tracking.hpp>
 #include <opencv2/objdetect.hpp>
 
 #include "capturer.h"
+#include "haar_face_detector.h"
 
 using namespace cv;
 using namespace cv::ml;
@@ -47,11 +49,10 @@ private:
     Mat inputFrame;
     unsigned int faceNum = 0, personNum = 0;
     const double roiThreshold = 0.5;
+    const double pyramidScale = 1.5;
 
     Ptr<SVM> svm;
-    //Ptr<Tracker> tracker;
-    CascadeClassifier peopleClassifier;
-    CascadeClassifier faceClassifier;
+    HaarFaceDetector faceDetector;
     std::vector<Rect> rois;
     std::vector<Rect> nmsRoi;
     HOGDescriptor hogDescriptor;
