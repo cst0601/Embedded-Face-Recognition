@@ -49,14 +49,11 @@ void MainWindow::on_open_camera_button_clicked()
 
 void MainWindow::on_face_recog_button_clicked()
 {
-    /* the following code does not do anything for obvious reason :) */
     QPixmap image = model.getDetectFrame();
     ui->detect_image_label->setPixmap(image.scaled(
                                           ui->detect_image_label->width(),
                                           ui->detect_image_label->height(),
                                           Qt::KeepAspectRatio));
-    qApp->processEvents();
-
 }
 
 void MainWindow::on_face_add_button_clicked()

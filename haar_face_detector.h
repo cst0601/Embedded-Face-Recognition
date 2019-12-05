@@ -12,7 +12,7 @@ using namespace cv;
 
 /*
  * HaarFaceDetector
- * Uses CascadeClassifier to detect face
+ * Detector using CascadeClassifier to detect face
  */
 class HaarFaceDetector
 {

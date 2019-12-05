@@ -32,12 +32,29 @@ void FaceCaptureModel::saveTrainingData()
     system(("mkdir -p " + trainingDataPath + "/" + faceName).c_str());
     for(int i = 0; i < faces.size(); i++)
     {
-        time_t t = time(NULL);
-        std::cout << trainingDataPath + "/" + faceName + "/" + std::to_string(t) + std::to_string(i) + ".jpg" << std::endl;
-        cv::imwrite(trainingDataPath + "/" + faceName + "/" + std::to_string(t) + std::to_string(i) + ".jpg",
-                    faces[i]);
+        Mat trainingImage;
+        int imageSig = trainingDataPreprocess(faces[i], trainingImage);
+        if (imageSig == 0)
+        {
+            time_t t = time(NULL);
+            std::cout << trainingDataPath + "/" + faceName + "/" + std::to_string(t) + std::to_string(i) + ".jpg" << std::endl;
+            cv::imwrite(trainingDataPath + "/" + faceName + "/" + std::to_string(t) + std::to_string(i) + ".jpg",
+                        trainingImage);
+        }
     }
     faces.clear();
+}
+
+// generate list of face in 160 * 160,
+// only captures 1 if many faces appear in input image
+int FaceCaptureModel::trainingDataPreprocess(const Mat & image, Mat & dst)
+{
+    std::vector<Rect> faces = faceDetector.searchFace(image);
+    if (faces.size() == 0)
+        return -1;          // no faces detected in input image
+    dst = image(faces[0]);  // crop 1 face in image for training data
+    resize(dst, dst, Size(160, 160));
+    return 0;
 }
 
 void FaceCaptureModel::hog()
