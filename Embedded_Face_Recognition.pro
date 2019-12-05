@@ -37,3 +37,4 @@ LIBS += /usr/lib/libopencv_imgproc.so \
         /usr/lib/libopencv_videoio.so \
         /usr/lib/libopencv_ml.so \
         /usr/lib/libopencv_objdetect.so \
+        /usr/lib/libopencv_imgcodecs.so

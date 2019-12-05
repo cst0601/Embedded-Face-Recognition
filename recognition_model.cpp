@@ -26,7 +26,7 @@ QPixmap RecognitionModel::mat2Pixmap (Mat input)
 
 QPixmap RecognitionModel::getInputFrame ()
 {
-    inputFrame = Capturer::getInstance()->getFrame();    
+    inputFrame = Capturer::getInstance()->getFrame();
     return mat2Pixmap(inputFrame);
 }
 
@@ -35,9 +35,10 @@ QPixmap RecognitionModel::getDetectFrame ()
     clear();
     /* show it on opencv window */
     slidingWindow(generatePyramid(), Size(64, 144), Size(16, 32));
-    //cascadeSearch();
+    cascadeSearch();
     //showPyramid();  /* testing */
     generateInstances();
+    imshow("detect", inputFrame);
     return mat2Pixmap(inputFrame);
 }
 
@@ -53,7 +54,7 @@ void RecognitionModel::cascadeSearch ()
     faceNum = peopleInstances.size();
     for (size_t i = 0; i < peopleInstances.size(); ++i)
     {
-        rectangle(inputFrame, peopleInstances[i], Scalar(0, 255, 0));
+        rectangle(inputFrame, peopleInstances[i], Scalar(255, 0, 0), 2);
     }
 }
 
@@ -93,6 +94,31 @@ std::string RecognitionModel::getNumberOfFaces () const
     return std::to_string(faceNum);
 }
 
+std::string RecognitionModel::getNumberOfPeople () const
+{
+    return std::to_string(nmsRoi.size());
+}
+
+int RecognitionModel::getAreaOfOverlap(const Rect & r1, const Rect & r2) const
+{
+    Rect overlapRect = r1 | r2;
+    return overlapRect.area();
+}
+
+int RecognitionModel::getAreaOfUnion(const Rect & r1, const Rect & r2) const
+{
+    Rect unionRect = r1 & r2;
+    return unionRect.area();
+}
+
+double RecognitionModel::getIoU(Rect r1, Rect r2) const
+{
+    int unionArea = getAreaOfUnion(r1, r2);
+    if (unionArea == 0)
+        return 0;
+    return getAreaOfOverlap(r1, r2) / unionArea;
+}
+
 // testing method, generates and show the pyramid image
 void RecognitionModel::showPyramid () const
 {
@@ -114,14 +140,15 @@ void RecognitionModel::slidingWindow(std::vector<Mat> image, Size windowSize, Si
             for (unsigned int windowX = 0; windowX + windowSize.width < image[i].cols; windowX += stride.width)
             {
                 Mat roiMat = image[i](Rect(windowX, windowY, windowSize.width, windowSize.height));
-                float result = svm->predict(hog(roiMat));
-                rois.push_back(roiDepyramid(
-                                   Rect(windowX,
-                                        windowY,
-                                        windowSize.width,
-                                        windowSize.height),
-                                   (i + 1) * 2)); // i th pyramid image
-                scores.push_back(result);
+                if (svm->predict(hog(roiMat)) != -1)    // if detect person
+                {
+                    rois.push_back(roiDepyramid(
+                                       Rect(windowX,
+                                            windowY,
+                                            windowSize.width,
+                                            windowSize.height),
+                                       (i + 1) * 2)); // i th pyramid image
+                }
             }
         }
     }
@@ -130,22 +157,36 @@ void RecognitionModel::slidingWindow(std::vector<Mat> image, Size windowSize, Si
 // Uses NMS to select useful rois
 void RecognitionModel::generateInstances ()
 {
-    int counter = 0;
-    for (unsigned int i = 0; i < scores.size(); ++i)
-        if (scores[i] != -1) {
-            ++counter;
-            rectangle(inputFrame, rois[i], Scalar(0, 255, 0), 1);   /* for testing */
-            //std::cout << "roi area = " << rois[i].area() << std::endl;
+    NMS();
+    for (unsigned int i = 0; i < nmsRoi.size(); ++i)
+    {
+        rectangle(inputFrame, nmsRoi[i], Scalar(0, 255, 0), 2);   /* for testing */
+    }
+}
+
+void RecognitionModel::NMS ()
+{
+    nmsRoi.push_back(rois[0]);
+    for (unsigned int i = 1; i < rois.size(); ++i)
+    {
+        bool independentRoi = true;
+        for (unsigned int j = 0; j < nmsRoi.size(); ++j)
+        {
+            if (getIoU(nmsRoi[j], rois[i]) > roiThreshold) {
+                independentRoi = false;
+                break;
+            }
         }
-    //std::cout << "rois: " << counter << std::endl;
+        if (independentRoi)
+            nmsRoi.push_back(rois[i]);
+    }
 }
 
 // clean all the leftovers of the last frame
 void RecognitionModel::clear ()
 {
+    nmsRoi.clear();
     rois.clear();
-    scores.clear();
-    nmsIndices.clear();
 }
 
 void RecognitionModel::release ()

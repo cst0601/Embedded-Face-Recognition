@@ -31,9 +31,14 @@ public:
     std::vector<float> hog(Mat);
     Rect roiDepyramid(Rect, int);
     std::string getNumberOfFaces () const;
+    std::string getNumberOfPeople () const;
+    int getAreaOfOverlap(const Rect &, const Rect &) const;
+    int getAreaOfUnion(const Rect &, const Rect &) const;
+    double getIoU(Rect, Rect) const;
     void showPyramid () const;
     void slidingWindow(std::vector<Mat>, Size, Size);
     void generateInstances();
+    void NMS();
     void clear();
     void release();
 
@@ -41,14 +46,14 @@ public:
 private:
     Mat inputFrame;
     unsigned int faceNum = 0, personNum = 0;
+    const double roiThreshold = 0.5;
 
     Ptr<SVM> svm;
     //Ptr<Tracker> tracker;
     CascadeClassifier peopleClassifier;
     CascadeClassifier faceClassifier;
     std::vector<Rect> rois;
-    std::vector<float> scores;
-    std::vector<int> nmsIndices;
+    std::vector<Rect> nmsRoi;
     HOGDescriptor hogDescriptor;
 };
 
