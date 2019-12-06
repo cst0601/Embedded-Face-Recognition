@@ -1,6 +1,7 @@
 #include "recognition_model.h"
 
-RecognitionModel::RecognitionModel()
+RecognitionModel::RecognitionModel():
+    faceRecognizer(12996)
 {
     std::cout << "OpenCV Version used:" << CV_MAJOR_VERSION << "." << CV_MINOR_VERSION << "." << CV_VERSION_REVISION  << std::endl;
     svm = SVM::load("/home/nvidia/Desktop/model/people.xml");
@@ -118,7 +119,7 @@ void RecognitionModel::showPyramid () const
     std::vector<Mat> pyramidFrame = generatePyramid();
     for (unsigned int i = 0; i < 3; ++i)
     {
-        cv::imshow("test_" + std::to_string(i), pyramidFrame[i]);
+        //cv::imshow("test_" + std::to_string(i), pyramidFrame[i]);
     }
 }
 
@@ -174,6 +175,23 @@ void RecognitionModel::NMS ()
         if (independentRoi)
             nmsRoi.push_back(rois[i]);
     }
+}
+
+int RecognitionModel::predictFace()
+{
+    // preprocess
+    int faceFlag = 0;       // flag show if face is detected
+    std::vector<Rect> faces = faceDetector.searchFace(inputFrame);
+    if (faces.size() == 0)
+        faceFlag = -1;          // no faces detected in input image
+    Mat dst = inputFrame(faces[0]);  // crop 1 face in image for training data
+    resize(dst, dst, Size(160, 160));
+
+    if (faceFlag == 0)
+    {
+        return faceRecognizer.test(dst);
+    }
+    return -1;
 }
 
 // clean all the leftovers of the last frame

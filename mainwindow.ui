@@ -144,6 +144,19 @@
      <string>Add New Face</string>
     </property>
    </widget>
+   <widget class="QLabel" name="face_index_label">
+    <property name="geometry">
+     <rect>
+      <x>580</x>
+      <y>360</y>
+      <width>67</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Person</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -151,7 +164,7 @@
      <x>0</x>
      <y>0</y>
      <width>887</width>
-     <height>22</height>
+     <height>25</height>
     </rect>
    </property>
   </widget>

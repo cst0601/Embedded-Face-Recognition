@@ -40,7 +40,7 @@ void MainWindow::on_open_camera_button_clicked()
                                               ui->detect_image_label->width(),
                                               ui->detect_image_label->height(),
                                               Qt::KeepAspectRatio));
-        on_face_recog_button_clicked();
+        updateDetectLabel();
         updateFaceNumberLabel();
         updatePeopleNumberLabel();
         qApp->processEvents();
@@ -48,6 +48,13 @@ void MainWindow::on_open_camera_button_clicked()
 }
 
 void MainWindow::on_face_recog_button_clicked()
+{
+    std::cout << "predict" << std::endl;
+    QString str = QString::fromUtf8(std::to_string(model.predictFace()).c_str());
+    ui->face_index_label->setText(str);
+}
+
+void MainWindow::updateDetectLabel()
 {
     QPixmap image = model.getDetectFrame();
     ui->detect_image_label->setPixmap(image.scaled(

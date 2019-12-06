@@ -31,7 +31,6 @@ public:
     void pushFrameToData ();
     void setFaceName (std::string);
     void saveTrainingData();
-    void hog();
     void train();
 private:
     Mat frame;

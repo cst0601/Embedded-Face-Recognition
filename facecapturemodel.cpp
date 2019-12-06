@@ -58,13 +58,9 @@ int FaceCaptureModel::trainingDataPreprocess(const Mat & image, Mat & dst)
     return 0;
 }
 
-void FaceCaptureModel::hog()
-{
-
-}
-
 void FaceCaptureModel::train ()
 {
-    HogSvmFaceDetector detector(123);
+    HogSvmFaceDetector detector(12996);
     detector.readTrainingData("/home/nvidia/Desktop/face_data/");
+    detector.hogsvm();
 }
