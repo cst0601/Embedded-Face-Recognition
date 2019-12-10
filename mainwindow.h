@@ -23,6 +23,8 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
     void updateFaceNumberLabel ();
+    void updatePeopleNumberLabel ();
+    void updateDetectLabel();
 
 private slots:
     void on_close_app_button_clicked();

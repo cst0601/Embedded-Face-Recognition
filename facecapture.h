@@ -22,6 +22,8 @@ private slots:
 
     void on_buttonBox_clicked(QAbstractButton *button);
 
+    void on_capture_button_pressed();
+
 private:
     Ui::FaceCapture *ui;
     FaceCaptureModel model;
