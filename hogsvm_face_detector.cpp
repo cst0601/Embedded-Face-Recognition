@@ -97,6 +97,7 @@ int HogSvmFaceDetector::test(Mat testData)
     {
         testFeatures.ptr<float>(0)[featureIndex] = feature[featureIndex];
     }
-    return svm->predict(feature, 0);
+    //return svm->predict(feature, 0);
+    return 0;
 }
 
