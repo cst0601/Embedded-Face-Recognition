@@ -3,6 +3,8 @@
 HogSvmFaceDetector::HogSvmFaceDetector (int featureAmount):
     featureAmount(featureAmount)
 {
+    std::cout << "132" << std::endl;
+    svm = SVM::create();
     // set svm params
     svm->setKernel(SVM::LINEAR);
     svm->setType(SVM::C_SVC);
@@ -19,6 +21,8 @@ void HogSvmFaceDetector::readTrainingData(
     std::cout << "folders= " << personFolder.size() << std::endl;
     for (int i = 0; i < personFolder.size(); ++i)
     {
+        if (personFolder[i] == "." || personFolder[i] == "..")
+            continue;
         std::cout << "folder name: " << personFolder[i] << std::endl;
         std::vector<Mat> personImages;
         std::vector<String> fileNames;
@@ -27,14 +31,8 @@ void HogSvmFaceDetector::readTrainingData(
              "/*.jpg", fileNames); // get the filenames of a person's folder
         for (int j = 0; j < fileNames.size(); ++j)
         {
-            std::cout << "filename " << fileNames[j] << std::endl;
-            personImages.push_back(
-                        imread(
-                            datasetFilePath +
-                            personFolder[i] + "/" +
-                            fileNames[j]
-                            )
-                        );
+            std::cout << "[read]: filename " << fileNames[j] << std::endl;
+            personImages.push_back(imread(fileNames[j]));
         }
         trainingData.push_back(personImages);
     }
@@ -62,14 +60,17 @@ void HogSvmFaceDetector::hogsvm()
 
     std::vector<float> feature;
     cv::Mat sampleFeatures = cv::Mat(cv::Size(featureAmount, trainingDataAmount), CV_32FC1);
-    cv::Mat sampleLabels = cv::Mat(cv::Size(1, trainingDataAmount), CV_32FC1);
-
+    cv::Mat sampleLabels = cv::Mat(cv::Size(1, trainingDataAmount), CV_32SC1);
+    std::cout << "trainingData.size() = " << trainingData.size() << std::endl;
     for (int personIndex = 0; personIndex < trainingData.size(); personIndex++)
     {
         std::cout << "Person " << personIndex << " hog" << std::endl;
-        for (int i = 0; i < trainingData[i].size(); ++i)
+        for (int i = 0; i < trainingData[personIndex].size(); ++i)
         {
+            //imshow("training image", trainingData[personIndex][i]);
+            //waitKey(1);
             hogDescriptor.compute(trainingData[personIndex][i], feature);       // in sample, reads image in gray scale
+            std::cout << "blyat" << std::endl;
             for (int featureIndex = 0; featureIndex < featureAmount; ++featureIndex)
             {
                 sampleFeatures.ptr<float>(i)[featureIndex] = feature[featureIndex];
@@ -89,6 +90,7 @@ void HogSvmFaceDetector::trainSvm (cv::Mat sampleFeatures, cv::Mat sampleLabel)
 
 int HogSvmFaceDetector::test(Mat testData)
 {
+    std::cout << "testData size: " << testData.cols << " " << testData.rows << std::endl;
     svm->load("/home/nvidia/Desktop/model/face.xml");
     cv::Mat testFeatures = cv::Mat(cv::Size(featureAmount, 1), CV_32FC1);
     std::vector<float> feature;
@@ -97,6 +99,6 @@ int HogSvmFaceDetector::test(Mat testData)
     {
         testFeatures.ptr<float>(0)[featureIndex] = feature[featureIndex];
     }
-    return svm->predict(feature, 0);
+    return svm->predict(feature);
 }
 

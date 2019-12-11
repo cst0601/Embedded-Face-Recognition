@@ -180,7 +180,7 @@ void RecognitionModel::NMS ()
 int RecognitionModel::predictFace()
 {
     // preprocess
-    int faceFlag = 0;       // flag show if face is detected
+    int faceFlag = 0;           // flag show if face is detected
     std::vector<Rect> faces = faceDetector.searchFace(inputFrame);
     if (faces.size() == 0)
         faceFlag = -1;          // no faces detected in input image
