@@ -70,14 +70,13 @@ void HogSvmFaceDetector::hogsvm()
             //imshow("training image", trainingData[personIndex][i]);
             //waitKey(1);
             hogDescriptor.compute(trainingData[personIndex][i], feature);       // in sample, reads image in gray scale
-            std::cout << "blyat" << std::endl;
             for (int featureIndex = 0; featureIndex < featureAmount; ++featureIndex)
             {
                 sampleFeatures.ptr<float>(i)[featureIndex] = feature[featureIndex];
             }
             feature.clear();
-            sampleLabels.ptr<float>(i)[0] = personIndex;
         }
+        sampleLabels.ptr<float>(personIndex)[0] = personIndex;
     }
     trainSvm(sampleFeatures, sampleLabels);
 }
@@ -91,7 +90,7 @@ void HogSvmFaceDetector::trainSvm (cv::Mat sampleFeatures, cv::Mat sampleLabel)
 int HogSvmFaceDetector::test(Mat testData)
 {
     std::cout << "testData size: " << testData.cols << " " << testData.rows << std::endl;
-    svm->load("/home/nvidia/Desktop/model/face.xml");
+    svm = SVM::load("/home/nvidia/Desktop/model/face.xml");
     cv::Mat testFeatures = cv::Mat(cv::Size(featureAmount, 1), CV_32FC1);
     std::vector<float> feature;
     hogDescriptor.compute(testData, feature);
@@ -99,11 +98,7 @@ int HogSvmFaceDetector::test(Mat testData)
     {
         testFeatures.ptr<float>(0)[featureIndex] = feature[featureIndex];
     }
-<<<<<<< HEAD
-    return svm->predict(feature);
-=======
-    //return svm->predict(feature, 0);
-    return 0;
->>>>>>> master
+    return svm->predict(testFeatures);
+
 }
 
