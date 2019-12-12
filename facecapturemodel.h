@@ -13,7 +13,7 @@
 
 #include "capturer.h"
 #include "haar_face_detector.h"
-#include "hogsvm_face_detector.h"
+#include "face_detector.h"
 
 using namespace cv;
 

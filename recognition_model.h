@@ -16,7 +16,7 @@
 
 #include "capturer.h"
 #include "haar_face_detector.h"
-#include "hogsvm_face_detector.h"
+#include "face_detector.h"
 
 using namespace cv;
 using namespace cv::ml;
@@ -42,7 +42,7 @@ public:
     void slidingWindow(std::vector<Mat>, Size, Size);
     void generateInstances();
     void NMS();
-    int predictFace();
+    std::string predictFace();
     void clear();
     void release();
 
@@ -55,7 +55,7 @@ private:
 
     Ptr<SVM> svm;
     HaarFaceDetector faceDetector;
-    HogSvmFaceDetector faceRecognizer;
+    FaceDetector faceRecognizer;
 
     std::vector<Rect> rois;
     std::vector<Rect> nmsRoi;

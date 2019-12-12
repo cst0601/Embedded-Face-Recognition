@@ -1,7 +1,6 @@
 #include "recognition_model.h"
 
-RecognitionModel::RecognitionModel():
-    faceRecognizer(12996)
+RecognitionModel::RecognitionModel()
 {
     std::cout << "OpenCV Version used:" << CV_MAJOR_VERSION << "." << CV_MINOR_VERSION << "." << CV_VERSION_REVISION  << std::endl;
     svm = SVM::load("/home/nvidia/Desktop/model/people.xml");
@@ -177,7 +176,7 @@ void RecognitionModel::NMS ()
     }
 }
 
-int RecognitionModel::predictFace()
+std::string RecognitionModel::predictFace()
 {
     // preprocess
     int faceFlag = 0;           // flag show if face is detected
@@ -191,7 +190,7 @@ int RecognitionModel::predictFace()
     {
         return faceRecognizer.test(dst);
     }
-    return -1;
+    return "o'_'o";
 }
 
 // clean all the leftovers of the last frame

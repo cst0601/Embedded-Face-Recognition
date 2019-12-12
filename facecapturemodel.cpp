@@ -60,7 +60,8 @@ int FaceCaptureModel::trainingDataPreprocess(const Mat & image, Mat & dst)
 
 void FaceCaptureModel::train ()
 {
-    HogSvmFaceDetector detector(12996);
+    std::cout << "**train" << std::endl;
+    FaceDetector detector;
     detector.readTrainingData("/home/nvidia/Desktop/face_data/");
-    detector.hogsvm();
+    detector.train();
 }

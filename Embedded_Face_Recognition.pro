@@ -20,7 +20,7 @@ SOURCES += main.cpp\
         facecapturemodel.cpp \
         capturer.cpp \
     haar_face_detector.cpp \
-    hogsvm_face_detector.cpp
+    face_detector.cpp
 
 HEADERS  += mainwindow.h \
             recognition_model.h \
@@ -28,7 +28,7 @@ HEADERS  += mainwindow.h \
             facecapturemodel.h \
             capturer.h \
     haar_face_detector.h \
-    hogsvm_face_detector.h
+    face_detector.h
 
 FORMS    += mainwindow.ui \
             facecapture.ui
@@ -44,4 +44,5 @@ LIBS += /usr/lib/libopencv_imgproc.so \
         /usr/lib/libopencv_ml.so \
         /usr/lib/libopencv_objdetect.so \
         /usr/lib/libopencv_imgcodecs.so \
+        /home/nvidia/Desktop/opencv-3.3.1/build/lib/libopencv_face.so \
         -fopenmp
