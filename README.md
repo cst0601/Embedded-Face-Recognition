@@ -11,3 +11,6 @@ If you are building this on an embedded system, install Qt and build it using CM
 - OpenCV contrib
 - Qt 5 
 
+## Demo
+![Demo](https://i.imgur.com/jxyewOi.png)
+* Capture user's face. after pressing the OK button, the software will re-train the model to recognize the new addd user.
